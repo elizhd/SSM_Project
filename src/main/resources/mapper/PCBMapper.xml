@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.pcb.management.dao.IPCBDao">
+	<insert id="insert" parameterType="com.pcb.management.model.PCB">
+        insert into pcb_info(name, address, type)
+        values(#{name},#{address},#{type})
+    </insert>
+
+
+    <delete id="delete" parameterType="Integer">
+        delete from pcb_info where id=#{id}
+    </delete>
+
+
+    <update id="update" parameterType="com.pcb.management.model.PCB">
+        update pcb_info
+        set name=#{name},address=#{address},type=#{type}
+	    where id=#{id}
+    </update>
+
+
+
+    <select id="findById" resultType="com.pcb.management.model.PCB"
+            parameterType="Integer">
+        select * from pcb_info where id=#{id}
+    </select>
+
+
+    <select id="findAll" resultType="com.pcb.management.model.PCB"
+            parameterType="Integer">
+        select * from pcb_info
+        order by ${sort} ${order}
+        limit #{offset},#{rows}
+
+    </select>
+
+    <select id="findAllData" resultType="com.pcb.management.model.PCB"
+            parameterType="Integer">
+        select * from pcb_info
+    </select>
+
+
+    <select id="count" resultType="Integer">
+        select COUNT(*) from pcb_info
+    </select>
+
+    <select id="accurateSearch" parameterType="com.pcb.management.model.PCB"
+            resultType="com.pcb.management.model.PCB">
+        select * from pcb_info
+        where name=#{name} and address=#{address} and type=#{type}
+    </select>
+
+    <select id="fuzzSearch" parameterType="String"
+            resultType="com.pcb.management.model.PCB">
+        select * from pcb_info
+        where name like concat('%',#{keyWord},'%')
+        or address like concat('%',#{keyWord},'%')
+        or type like concat('%',#{keyWord},'%')
+    </select>
+
+</mapper>

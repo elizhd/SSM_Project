@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PCB生产管理系统 | 用户登录</title>
+
+    <link rel="stylesheet" type="text/css" href="../web_resources/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../web_resources/bootstrap/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../web_resources/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../web_resources/bootstrap/js/jquery.cookie.js"></script>
+
+    <style>
+        .box {
+            width: 450px;
+            padding: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #FCFCFC;
+            border-radius: 10px;
+            box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+            z_index: -1;
+        }
+
+
+        @media (max-width: 1024px) {
+            .box {
+                width: 80%;
+                padding-left: 20px;
+                padding-right: 20px;
+                top: 400px;
+                z-index: -100;
+                position: relative;
+
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">PCB生产管理系统</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="../index.html">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">登录
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html">注册</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="management.html">管理</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="box">
+        <form class="form-group" id="loginForm">
+            <div style="margin:20px 20px">
+                <img src="../web_resources/img/login-icon.svg" class="rounded mx-auto d-block " alt="" width="70"
+                     height="70">
+            </div>
+            <div class="form-group">
+                <label for="userName">用户名</label>
+                <input type="text" class="form-control" id="userName" aria-describedby="UserNameHelp"
+                       placeholder="Username" name="userName">
+
+            </div>
+            <div class="form-group">
+                <label for="userPassword">密码</label>
+                <input type="password" class="form-control" id="userPassword" placeholder="Password"
+                       name="userPassword">
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">记住我</label>
+                <small id="tip" class="form-text text-muted"></small>
+            </div>
+
+            <div class="form-group ">
+                <input id="loginBtn" class="btn btn-primary btn-block" value="登录" type="button"/>
+                <hr class="my-4">
+                <small id="registerHelp" class="form-text text-muted" style="margin:10px 0px 10px 0px">还没有账号？现在注册吧！
+                </small>
+                <a class="btn btn-primary btn-block" id="register" href="register.html">注册</a>
+            </div>
+
+            <div class="alert" role="alert" id="loginResult">
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    //	判断是否登录 未登录返回登录界面
+    if (sessionStorage.getItem("userName") != null) {
+        $('#loginResult').addClass('alert-success');
+        $('#userName').attr("disabled", true);
+        $('#userPassword').attr("disabled", true);
+        $('#loginResult').html(sessionStorage.getItem("userName") + '，您已登录！');
+        setTimeout(window.location.href = 'management.html', 100000);
+    }
+
+
+    $(function () {
+        var userName = $.cookie('userName');
+        var userPassword = $.cookie('userPassword');
+        console.log(userName)
+
+        $('#userName').val(userName);
+        $('#userPassword').val(userPassword);
+        if (userName != null && userName != '' && userPassword != null && userPassword != '') {//选中保存秘密的复选框
+            $("#rememberMe").attr('checked', true);
+        }
+    });
+
+
+    $('#userName').focus(function () {
+        $('#userPassword').removeClass('is-invalid');
+        $('#tip').html('');
+    })
+
+    $('#userPassword').focus(function () {
+        $('#userPassword').removeClass('is-invalid');
+        $('#tip').html('');
+    });
+
+    $('#loginBtn').click(function () {
+            var flag = true;
+            var userName = $('#userName').val();
+            var userPassword = $('#userPassword').val();
+            if (userName == '' || userPassword == '') {
+                $('#tip').css({'display': 'inline', 'margin-left': '40%'});
+                $('#tip').html('账户或者密码不得为空！');
+                flag = false;
+            }
+
+            if ($("#rememberMe").is(":checked")) {
+                $.cookie("userName", userName, {expires: 7});
+                $.cookie("userPassword", userPassword, {expires: 7});
+            } else {
+                $.cookie("userName", "", {expires: -1});
+                $.cookie("userPassword", "", {expires: -1});
+            }
+
+            if (flag) {
+                $.ajax({
+                    type: "post",
+                    url: getPath() + "/loginUser",
+                    async: false,
+                    dataType: "json",
+                    data: $('form').serialize(),
+                    success: function (data) {
+                        if (data.flag) {
+                            $('#userName').addClass('is-valid');
+                            $('#userPassword').addClass('is-valid');
+                            $('#loginResult').addClass('alert-success');
+                            $('#loginResult').html('登录成功！');
+
+                            sessionStorage.setItem("userName", userName)
+
+                            setTimeout(window.location.href = 'management.html', 5000);
+                        } else {
+                            $('#userPassword').addClass('is-invalid');
+                        }
+                    },
+                    error: function () {
+                        alert("网络错误");
+                    }
+                })
+            }
+        }
+    );
+
+    function getPath() {
+        var curPath = window.document.location.href;
+        var pathName = window.document.location.pathname;
+        var pos = curPath.indexOf(pathName);
+        var localhostPath = curPath.substring(0, pos);
+        var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+        // console.log(pathName)
+        // console.log(pathName.substr(1))
+        // console.log(projectName)
+        return localhostPath + projectName;
+    }
+
+
+</script>
+
+
+</body>
+</html>

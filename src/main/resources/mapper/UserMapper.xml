@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.pcb.management.dao.IUserDao">
+    <!--1.根据用户用户名及密码获得信息 -->
+	<select id="findByNameAndPassword" resultType="com.pcb.management.model.User">
+		select * from user where name = #{name} and password=#{password}
+	</select>
+
+	<!--2.插入用户信息 -->
+	<insert id="insertUser" parameterType="com.pcb.management.model.User" useGeneratedKeys="true" keyProperty="id">
+		insert into user(name,password,email,role) values(#{name},#{password},#{email},false)
+	</insert>
+
+
+	<!--3.根据用户用户名查找用户 -->
+	<select id="findUserByName" parameterType="String"
+			resultType="com.pcb.management.model.User">
+		select * from user where name = #{name}
+	</select>
+</mapper>
+

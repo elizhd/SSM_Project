@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PCB信息管理系统 | 首页</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./web_resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="./web_resources/bootstrap/css/font-awesome.css" rel="stylesheet">
+
+
+    <script src="./web_resources/bootstrap/js/jquery-3.4.0.min.js"></script>
+    <script src="./web_resources/bootstrap/js/bootstrap.bundle.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="./web_resources/bootstrap/js/jquery.easing.min.js"></script>
+
+    <style>
+        #mainNav {
+            min-height: 56px;
+            background-color: #fff;
+        }
+
+        #mainNav .navbar-toggler {
+            font-size: 80%;
+            padding: 0.75rem;
+            color: #64a19d;
+            border: 1px solid #64a19d;
+        }
+
+        #mainNav .navbar-toggler:focus {
+            outline: none;
+        }
+
+        #mainNav .navbar-brand {
+            color: #161616;
+            font-weight: 700;
+            padding: .9rem 0;
+        }
+
+        #mainNav .navbar-nav .nav-item:hover {
+            color: fade(white, 80%);
+            outline: none;
+            background-color: transparent;
+        }
+
+        #mainNav .navbar-nav .nav-item:active,
+        #mainNav .navbar-nav .nav-item:focus {
+            outline: none;
+            background-color: transparent;
+        }
+
+        @media (min-width: 992px) {
+            #mainNav {
+                padding-top: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+                background-color: transparent;
+                -webkit-transition: background-color 0.3s ease-in-out;
+                transition: background-color 0.3s ease-in-out;
+            }
+
+            #mainNav .navbar-brand {
+                padding: .5rem 0;
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            #mainNav .nav-link {
+                -webkit-transition: none;
+                transition: none;
+                padding: 2rem 1.5rem;
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            #mainNav .nav-link:hover {
+                color: rgba(255, 255, 255, 0.75);
+            }
+
+            #mainNav .nav-link:active {
+                color: white;
+            }
+
+            #mainNav.navbar-shrink {
+                background-color: #fff;
+            }
+
+            #mainNav.navbar-shrink .navbar-brand {
+                color: #161616;
+            }
+
+            #mainNav.navbar-shrink .nav-link {
+                color: #161616;
+                padding: 1.5rem 1.5rem 1.25rem;
+                border-bottom: 0.25rem solid transparent;
+            }
+
+            #mainNav.navbar-shrink .nav-link:hover {
+                color: #64a19d;
+            }
+
+            #mainNav.navbar-shrink .nav-link:active {
+                color: #467370;
+            }
+
+            #mainNav.navbar-shrink .nav-link.active {
+                color: #64a19d;
+                outline: none;
+                border-bottom: 0.25rem solid #64a19d;
+            }
+        }
+
+        .masthead {
+            position: relative;
+            width: 100%;
+            height: auto;
+            min-height: 35rem;
+            padding: 15rem 0;
+            background: -webkit-gradient(linear, left top, left bottom, from(rgba(22, 22, 22, 0.3)), color-stop(75%, rgba(22, 22, 22, 0.7)), to(#161616)), url("./web_resources/img/bg-masthead.jpg");
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%), url("./web_resources/img/bg-masthead.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+        }
+
+        .masthead h1 {
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+            letter-spacing: 0.8rem;
+            background: -webkit-linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+        }
+
+        .masthead h2 {
+            max-width: 20rem;
+            font-size: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .masthead h1 {
+                font-size: 4rem;
+                line-height: 4rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .masthead {
+                height: 100vh;
+                padding: 0;
+            }
+
+            .masthead h1 {
+                font-size: 6.5rem;
+                line-height: 6.5rem;
+                letter-spacing: 0.8rem;
+            }
+
+            .masthead h2 {
+                max-width: 30rem;
+                font-size: 1.25rem;
+            }
+        }
+
+        .btn {
+            -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
+            padding: 1.25rem 2rem;
+            font-size: 80%;
+            text-transform: uppercase;
+            letter-spacing: .15rem;
+            border: 0;
+        }
+
+        .btn-primary {
+            background-color: #64a19d;
+        }
+
+        .btn-primary:hover {
+            background-color: #4f837f;
+        }
+
+        .btn-primary:focus {
+            background-color: #4f837f;
+            color: white;
+        }
+
+        .btn-primary:active {
+            background-color: #467370 !important;
+        }
+
+        .about-section {
+            padding-top: 10rem;
+            background: -webkit-gradient(linear, left top, left bottom, from(#161616), color-stop(75%, rgba(22, 22, 22, 0.9)), to(rgba(22, 22, 22, 0.8)));
+            background: linear-gradient(to bottom, #161616 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.8) 100%);
+        }
+
+        .about-section p {
+            margin-bottom: 5rem;
+        }
+
+        .projects-section {
+            padding: 10rem 0;
+        }
+
+        .projects-section .featured-text {
+            padding: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .projects-section .featured-text {
+                padding: 0 0 0 2rem;
+                border-left: 0.5rem solid #64a19d;
+            }
+        }
+
+        .projects-section .project-text {
+            padding: 3rem;
+            font-size: 90%;
+        }
+
+        @media (min-width: 992px) {
+            .projects-section .project-text {
+                padding: 5rem;
+            }
+
+            .projects-section .project-text hr {
+                border-color: #64a19d;
+                border-width: .25rem;
+                width: 30%;
+            }
+        }
+
+        .signup-section {
+            padding: 10rem 0;
+            background: -webkit-gradient(linear, left top, left bottom, from(rgba(22, 22, 22, 0.1)), color-stop(75%, rgba(22, 22, 22, 0.5)), to(#161616)), url("./web_resources/img/bg-signup.jpg");
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.1) 0%, rgba(22, 22, 22, 0.5) 75%, #161616 100%), url("./web_resources/img/bg-signup.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+        }
+
+        .signup-section .form-inline input {
+            -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
+            padding: 1.25rem 2rem;
+            height: auto;
+            font-size: 80%;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            border: 0;
+        }
+
+
+        body {
+            letter-spacing: 0.0625em;
+        }
+
+        a {
+            color: #64a19d;
+        }
+
+        a:focus,
+        a:hover {
+            text-decoration: none;
+            color: #3c6360;
+        }
+
+        .bg-black {
+            background-color: #161616 !important;
+        }
+
+        .bg-primary {
+            background-color: #64a19d !important;
+        }
+
+        .text-primary {
+            color: #64a19d !important;
+        }
+
+        footer {
+            padding: 5rem 0;
+        }
+    </style>
+
+</head>
+
+<body id="page-top">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">PCB生产管理系统</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            菜单
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#about">关于</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#projects">介绍</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#signup">进入系统</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="masthead">
+    <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">PCB生产管理系统</h1>
+            <hr>
+            <h2 class="text-white-50 mx-auto mt-2 mb-5">该系统由ErGouBigDevil完成</h2>
+            <a href="#about" class="btn btn-primary js-scroll-trigger">开始</a>
+        </div>
+
+    </div>
+</header>
+
+<!-- About Section -->
+<section id="about" class="about-section text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-white mb-4">关于该项目</h2>
+                <p class="text-white-50">
+                    该项目主要使用了SSM(Spring+SpringMVC+MyBatis)框架, Bootstrap4前端框架。
+
+                </pre>
+                </p>
+            </div>
+        </div>
+        <img src="./web_resources/img/ipad.png" class="img-fluid" alt="">
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="projects-section bg-light">
+    <div class="container">
+
+        <!-- Featured Project Row -->
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-8 col-lg-7">
+                <img class="img-fluid mb-3 mb-lg-0" src="web_resources/img/pcb_system.jpg" alt="">
+            </div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="featured-text text-center text-lg-left">
+                    <h4>PCB生产管理系统 </h4>
+                    <p class="text-black-50 mb-0"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project One Row -->
+        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+            <div class="col-lg-6">
+                <img class="img-fluid" src="./web_resources/img/spring-icon.png" alt="">
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">SSM </h4>
+                            <p class="mb-0 text-white-50">
+                                SSM（Spring+SpringMVC+MyBatis）框架集由Spring、MyBatis两个开源框架整合而成(SpringMVC是Spring中的部分内容)。
+                                常作为数据源较简单的web项目的框架。
+                            </p>
+                            <hr class="d-none d-lg-block mb-0 ml-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Two Row -->
+        <div class="row justify-content-center no-gutters">
+            <div class="col-lg-6">
+                <img class="img-fluid" src="./web_resources/img/bootstrap.jpg" alt="">
+            </div>
+            <div class="col-lg-6 order-lg-first">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-right">
+                            <h4 class="text-white">Bootstrap4</h4>
+                            <p class="mb-0 text-white-50">Bootstrap 是一套流行的前端框架，它帮助你轻松构建对移动设备很友好的响应式网站。</p>
+                            <hr class="d-none d-lg-block mb-0 mr-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Signup Section -->
+<section id="signup" class="signup-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+                <i class="fa fa-paper-plane fa-2x mb-2 text-white"></i>
+                <h2 class="text-white mb-5">进入系统！</h2>
+
+                <div class="form-inline d-flex">
+                    <a href="./html/login.html" class="btn btn-primary col-md-3 offset-md-1">登录</a>
+                    <a href="./html/register.html" class="btn btn-primary col-md-3 offset-md-3">注册</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="bg-black small text-center text-white-50">
+    <div class="container">
+        Copyright &copy; Your Website 2019
+    </div>
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+</body>
+
+
+<script>
+    (function ($) {
+        "use strict"; // Start of use strict
+
+        // Smooth scrolling using jQuery easing
+        $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: (target.offset().top - 70)
+                    }, 1000, "easeInOutExpo");
+                    return false;
+                }
+            }
+        });
+
+        // Closes responsive menu when a scroll trigger link is clicked
+        $('.js-scroll-trigger').click(function () {
+            $('.navbar-collapse').collapse('hide');
+        });
+
+        // Activate scrollspy to add active class to navbar items on scroll
+        $('body').scrollspy({
+            target: '#mainNav',
+            offset: 100
+        });
+
+        // Collapse Navbar
+        var navbarCollapse = function () {
+            if ($("#mainNav").offset().top > 100) {
+                $("#mainNav").addClass("navbar-shrink");
+            } else {
+                $("#mainNav").removeClass("navbar-shrink");
+            }
+        };
+        // Collapse now if page is not at top
+        navbarCollapse();
+        // Collapse the navbar when page is scrolled
+        $(window).scroll(navbarCollapse);
+
+    })(jQuery); // End of use strict
+
+</script>
+
+</html>

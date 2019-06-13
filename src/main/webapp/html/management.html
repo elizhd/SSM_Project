@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PCB生产管理系统 | 管理</title>
+    <link rel="stylesheet" type="text/css" href="../web_resources/bootstrap/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="../web_resources/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../web_resources/bootstrap/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../web_resources/bootstrap/js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="../web_resources/bootstrap_table/bootstrap-table.min.css">
+    <script type="text/javascript" src="../web_resources/bootstrap_table/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="../web_resources/bootstrap_table/bootstrap-table-locale-all.min.js"></script>
+    <script src="../web_resources/boot-box/bootbox.min.js"></script>
+    <script src="../web_resources/boot-box/bootbox.locales.min.js"></script>
+    <script src="../web_resources/bootstrap_table/extensions/export/bootstrap-table-export.js"></script>
+    <script src="../web_resources/bootstrap_table/tableExport.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">PCB生产管理系统</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="../index.html">
+                        首页
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="login.html">
+                        登录
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html">
+                        注册
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="management.html">
+                        管理
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="logout" class="nav-link" href="login.html">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        退出登录
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    //	判断是否登录 未登录返回登录界面
+    if (sessionStorage.getItem("userName") == null) {
+        alert("没有登录，请先登录");
+        setTimeout(window.location.href = 'login.html', 5000);
+    }
+</script>
+
+<!--  数据表 -->
+<div class="container" style="margin-top: 15px">
+
+    <div id="toolbar">
+        <button type="button" class="btn btn-primary" id="refreshBtn">
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+            刷新
+        </button>
+        <button type="button" class="btn btn-info" id="insertBtn" data-toggle="modal" data-target="#insertModal">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            添加
+        </button>
+        <button type="button" class="btn btn-danger" id="removeBtn">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+            删除
+        </button>
+        <button type="button" class="btn btn-primary" id="updateBtn">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+            修改
+        </button>
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="searchButtons" data-toggle="dropdown">
+            <i class="fa fa-search" aria-hidden="true"></i>
+            搜索
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button type="button" class="dropdown-item" id="accurateSearchBtn" data-toggle="modal"
+                    data-target="#accurateSearchModal">
+                <i class="fa fa-search-plus" aria-hidden="true"></i>
+                精确搜索
+            </button>
+            <button type="button" class="dropdown-item" id="fuzzSearchBtn" data-toggle="modal"
+                    data-target="#fuzzSearchModal">
+                <i class="fa fa-search-minus" aria-hidden="true"></i>
+                模糊搜索
+            </button>
+        </div>
+        <button type="button" class="btn btn-warning" id="importBtn" data-toggle="modal"
+                data-target="#importModal">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            导入数据
+        </button>
+
+        <button type="button" class="btn btn-primary" id="exportBtn">
+            <i class="fa fa-cloud-download" aria-hidden="true"></i>
+            导出数据
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">导入数据</h5>
+                </div>
+                <div class="modal-body" id="file">
+                    <td><input type="file" id="upfile" name="upfile" value=""/></td>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="uploadFile()">上传</button>
+                    </td>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="insertModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加数据</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" id="loginForm">
+                        <div class="form-group">
+                            <label for="insertName">名称</label>
+                            <input type="text" class="form-control" id="insertName" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="insertAddress">地址</label>
+                            <input type="text" class="form-control" id="insertAddress" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="insertType">类型</label>
+                            <input type="text" class="form-control" id="insertType" placeholder="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="insertSave">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">修改数据</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" id="updateForm">
+                        <div class="form-group">
+                            <label for="insertName">名称</label>
+                            <input type="text" class="form-control" id="updateName" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="insertAddress">地址</label>
+                            <input type="text" class="form-control" id="updateAddress" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="insertType">类型</label>
+                            <input type="text" class="form-control" id="updateType" placeholder="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="updateSave">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="fuzzSearchModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">模糊搜索</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" id="searchForm">
+                        <div class="form-group">
+                            <label for="searchKeyWord">搜索关键字</label>
+                            <input type="text" class="form-control" id="searchKeyWord" placeholder="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="fuzzSearch">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="accurateSearchModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">精确搜索</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" id="accurateSearchForm">
+                        <div class="form-group">
+                            <label for="insertName">名称</label>
+                            <input type="text" class="form-control" id="accurateSearchName" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="insertAddress">地址</label>
+                            <input type="text" class="form-control" id="accurateSearchAddress" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="insertType">类型</label>
+                            <input type="text" class="form-control" id="accurateSearchType" placeholder="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="accurateSearch">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--数据表-->
+    <table id="table"
+           data-toggle="true"
+           data-pagination="true"
+           data-locale="zh_CN"
+           data-show-toggle="true"
+           data-show-fullscreen="true"
+           data-show-columns="true"
+           data-sort-name="id"
+           data-sort-order="asc"
+           data-toolbar="#toolbar"
+           data-id-field="id"
+           data-click-to-select="true">
+        <thead>
+        <tr>
+            <th data-field="state" data-checkbox="true"></th>
+            <th data-field="id" data-sortable="true">id</th>
+            <th data-field="name" data-sortable="true">名称</th>
+            <th data-field="address" data-sortable="true">地址</th>
+            <th data-field="type" data-sortable="true">类型</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="alert  fade show" role="alert" id="mResult"></div>
+
+    <script>
+
+
+        // 获取当前地址
+        function getPath() {
+            var curPath = window.document.location.href;
+            var pathName = window.document.location.pathname;
+            var pos = curPath.indexOf(pathName);
+            var localhostPath = curPath.substring(0, pos);
+            var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+            // console.log(pathName)
+            // console.log(pathName.substr(1))
+            // console.log(projectName)
+            return localhostPath + projectName;
+        }
+
+
+        $(document).ready(function () {
+            initTable();
+        });
+
+
+        // 加载表格
+        function initTable() {
+            $('#table').bootstrapTable('destroy');
+            $("#table").bootstrapTable({
+                method: "get",
+                url: getPath() + "/getAllInfo",
+                pagination: true, //启动分页
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10, 25, 50, 100], //记录数可选列表
+                search: false,  //是否启用查询
+                showColumns: true,  //显示下拉框勾选要显示的列
+                sidePagination: "server", //表示服务端请求
+                queryParamsType: "limit",
+                clickToSelect: true,
+                queryParams: function queryParams(params) {   //设置查询参数
+                    var param = {
+                        limit: params.limit,   //页面大小
+                        offset: params.offset,  //页码
+                        search: params.search,
+                        sort: params.sort,
+                        order: params.order,
+                    };
+                    return param;
+                },
+                onLoadSuccess: function () {  //加载成功时执行
+                    $('#mResult').addClass('alert-success');
+                    $('#mResult').html("加载成功!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-success');
+                        $('#mResult').html('');
+                    }, 5000);
+                },
+                onLoadError: function () {  //加载失败时执行
+                    $('#mResult').addClass('alert-danger');
+                    $('#mResult').html("由于服务器的原因,加载失败!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-danger');
+                        $('#mResult').html('');
+                    }, 2000);
+                },
+
+                showExport: true,              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+                exportDataType: "basic",              //basic', 'all', 'selected'.
+                exportTypes: ['excel'],	    //导出类型
+                exportOptions: {
+                    fileName: '数据导出',              //文件名称设置
+                    worksheetName: 'Sheet1',          //表格工作区名称
+                    tableName: '商品数据表',
+                    excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+                }
+
+
+            });
+        }
+
+
+        $('#exportBtn').click(function () {
+                var url = getPath() + "/downloadExcel";
+                window.open(url);
+            }
+        )
+
+
+        // 刷新表格
+        $('#refreshBtn').click(function () {
+            initTable();
+        });
+
+        // 精确搜索
+        $('#accurateSearch').click(function () {
+            var searchName = $('#accurateSearchName').val();
+            var searchAddress = $('#accurateSearchAddress').val();
+            var searchType = $('#accurateSearchType').val();
+            $.ajax({
+                type: "post",
+                url: getPath() + "/accurateSearch",
+                async: false,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({"id": 0, "name": searchName, "address": searchAddress, "type": searchType}),
+                success: function (data) {
+                    if (data.total != 0) {
+                        $('#accurateSearchModal').modal("hide");
+                        $('#accurateSearchName').val("");
+                        $('#accurateSearchAddress').val("");
+                        $('#accurateSearchType').val("");
+                        $('#table').bootstrapTable('destroy');
+                        $('#table').bootstrapTable();
+                        $('#table').bootstrapTable('load', data);
+                    } else {
+                        bootbox.alert({
+                            centerVertical: true,
+                            title: "失败",
+                            message: "搜索失败!",
+                            locale: "zh_CN"
+                        })
+                        initTable();
+                    }
+
+                },
+                error: function () {
+                    $('#mResult').addClass('alert-danger');
+                    $('#mResult').html("由于服务器原因，搜索失败!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-danger');
+                        $('#mResult').html('');
+                    }, 2000);
+                }
+            })
+        });
+
+        // 模糊搜索
+        $('#fuzzSearch').click(function () {
+            var keyWord = $('#searchKeyWord').val();
+            $.ajax({
+                type: "post",
+                url: getPath() + "/fuzzSearch",
+                async: false,
+                data: {keyWord: keyWord},
+                dataType: "json",
+                success: function (data) {
+                    if (data.total != 0) {
+                        $('#fuzzSearchModal').modal("hide");
+                        $('#searchKeyWord').val("");
+                        $('#table').bootstrapTable('destroy');
+                        $('#table').bootstrapTable();
+                        $('#table').bootstrapTable('load', data);
+                    } else {
+                        bootbox.alert({
+                            centerVertical: true,
+                            title: "失败",
+                            message: "搜索失败!",
+                            locale: "zh_CN"
+                        })
+                        initTable();
+                    }
+                },
+                error: function () {
+                    $('#mResult').addClass('alert-danger');
+                    $('#mResult').html("由于服务器原因，搜索失败!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-danger');
+                        $('#mResult').html('');
+                    }, 2000);
+                }
+            })
+        });
+
+
+        // 添加信息
+        $('#insertSave').click(function () {
+            var insertName = $('#insertName').val();
+            var insertAddress = $('#insertAddress').val();
+            var insertType = $('#insertType').val();
+
+            $.ajax({
+                type: "post",
+                url: getPath() + "/insertData",
+                async: false,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({"id": 0, "name": insertName, "address": insertAddress, "type": insertType}),
+                success: function (data) {
+                    if (data.flag) {
+                        $('#insertModal').modal("hide");
+                        $('#insertName').val("");
+                        $('#insertAddress').val("");
+                        $('#insertType').val("");
+                        bootbox.alert({
+                            centerVertical: true,
+                            title: "成功",
+                            message: "添加成功!",
+                            locale: "zh_CN"
+                        })
+                        initTable();
+                    } else {
+                        bootbox.alert({
+                            centerVertical: true,
+                            title: "失败",
+                            message: "添加失败!",
+                            locale: "zh_CN"
+                        })
+                        initTable();
+                    }
+
+                },
+                error: function () {
+                    $('#mResult').addClass('alert-danger');
+                    $('#mResult').html("由于服务器原因，添加失败!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-danger');
+                        $('#mResult').html('');
+                    }, 2000);
+                }
+            })
+
+        });
+
+
+        //修改信息
+        $('#updateBtn').click(function () {
+            var rows = $('#table').bootstrapTable('getSelections');
+            if (rows.length != 1) {
+                bootbox.alert({
+                    centerVertical: true,
+                    title: "错误",
+                    message: "修改操作只能选择一条数据！",
+                    locale: "zh_CN"
+                });
+            } else {
+                $('#updateName').val(rows[0].name);
+                $('#updateAddress').val(rows[0].address);
+                $('#updateType').val(rows[0].type);
+                $('#updateModal').modal("toggle");
+            }
+        });
+
+
+        $('#logout').click(function () {
+            sessionStorage.removeItem("userName");
+        });
+        // 更新数据
+        $('#updateSave').click(function () {
+            var rows = $('#table').bootstrapTable('getSelections');
+            var updateId = rows[0].id;
+            var updateName = $('#updateName').val();
+            var updateAddress = $('#updateAddress').val();
+            var updateType = $('#updateType').val();
+
+            $.ajax({
+                type: "post",
+                url: getPath() + "/updateData",
+                async: false,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "id": updateId,
+                    "name": updateName,
+                    "address": updateAddress,
+                    "type": updateType
+                }),
+                success: function (data) {
+                    if (data.flag) {
+                        $('#updateModal').modal("hide");
+                        $('#updateName').val("");
+                        $('#updateAddress').val("");
+                        $('#updateType').val("");
+                        bootbox.alert({
+                            centerVertical: true,
+                            title: "成功",
+                            message: "修改成功!",
+                            locale: "zh_CN"
+                        })
+                        initTable();
+                    } else {
+                        bootbox.alert({
+                            centerVertical: true,
+                            title: "失败",
+                            message: "修改失败!",
+                            locale: "zh_CN"
+                        });
+                        initTable();
+                    }
+
+                },
+                error: function () {
+                    $('#mResult').addClass('alert-danger');
+                    $('#mResult').html("由于服务器原因，添加失败!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-danger');
+                        $('#mResult').html('');
+                    }, 2000);
+                }
+            })
+
+        });
+
+        // 删除信息
+        $('#removeBtn').click(function () {
+            var rows = $('#table').bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                bootbox.alert({
+                    centerVertical: true,
+                    title: "错误",
+                    message: "删除操作至少需要选择一条数据!",
+                    locale: "zh_CN"
+                });
+
+            } else {
+                var ids = '';
+                $.each(rows, function () {
+                    ids += this.id + ",";
+                });
+                ids = ids.substring(0, ids.length - 1);
+
+                bootbox.confirm({
+                    centerVertical: true,
+                    title: "删除确认",
+                    message: "确认删除所选用户?",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                type: 'POST',
+                                url: getPath() + "/deleteByIds",
+                                data: {ids: ids},
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.flag) {
+                                        bootbox.alert({
+                                            centerVertical: true,
+                                            title: "成功",
+                                            message: "删除成功!",
+                                            locale: "zh_CN"
+                                        });
+                                        initTable();
+                                    } else {
+                                        bootbox.alert({
+                                            centerVertical: true,
+                                            title: "失败",
+                                            message: "删除失败!",
+                                            locale: "zh_CN"
+                                        });
+                                        initTable();
+                                    }
+
+                                },
+                                error: function (data) {
+                                    $('#mResult').addClass('alert-danger');
+                                    $('#mResult').html("由于服务器原因，删除失败!");
+                                    setTimeout(function () {
+                                        $('#mResult').removeClass('alert-danger');
+                                        $('#mResult').html('');
+                                    }, 2000);
+                                },
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+
+        function uploadFile() {
+            var file = $("#upfile").val();
+            file = file.substring(file.lastIndexOf('.'), file.length);
+            if (file == '') {
+                alert("上传文件不能为空！");
+            } else if (file != '.xlsx' && file != '.xls') {
+                alert("请选择正确的excel类型文件！");
+            } else {
+                ajaxFileUpload();
+            }
+        }
+
+        function ajaxFileUpload() {
+            var formData = new FormData();
+            var name = $("#upfile").val();
+            formData.append("file", $("#upfile")[0].files[0]);
+            formData.append("name", name);
+            $.ajax({
+                url: getPath() + "/uploadExcel",
+                type: "POST",
+                async: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (data) {
+                    // console.log(e);
+                    $('#importModal').modal("hide");
+                    $('#upfile').val("");
+                    bootbox.alert({
+                        centerVertical: true,
+                        title: "成功",
+                        message: "导入成功!",
+                        locale: "zh_CN"
+                    });
+                    initTable();
+                },
+                error: function (data) {
+                    $('#mResult').addClass('alert-danger');
+                    $('#mResult').html("由于服务器原因，导入失败!");
+                    setTimeout(function () {
+                        $('#mResult').removeClass('alert-danger');
+                        $('#mResult').html('');
+                    }, 2000);
+                },
+            });
+        }
+
+
+    </script>
+
+
+</div>
+
+
+</body>
+
+
+</html>

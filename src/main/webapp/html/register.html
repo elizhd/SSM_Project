@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PCB生产管理系统 | 账户注册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="../web_resources/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../web_resources/bootstrap/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../web_resources/bootstrap/js/bootstrap.min.js"></script>
+
+    <style>
+        .box {
+            width: 450px;
+            padding: 40px;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #FCFCFC;
+            border-radius: 10px;
+            box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+            z_index:-1;
+        }
+
+
+        @media (max-width: 1024px) {
+            .box{
+                width:100%;
+                padding-left: 20px;
+                padding-right: 20px;
+                top: 400px;
+                margin:0;
+                z-index:-100;
+                position: relative;
+
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">PCB生产管理系统</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="../index.html">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="register.html">注册
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="management.html">管理</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="box">
+        <form class="form-group" id="registerForm">
+            <h1 align="center" style="margin-bottom:20px">注册</h1>
+            <div class="form-group">
+                <label for="userName">用户名</label>
+                <input type="text" class="form-control" id="userName" aria-describedby="UserNameHelp"
+                       placeholder="Username" name="userName">
+                <div id="userNameFeedback"></div>
+
+            </div>
+            <div class="form-group">
+                <label for="userPassword">密码</label>
+                <input type="password" class="form-control" id="userPassword" placeholder="Password"
+                       name="userPassword">
+            </div>
+
+            <div class="form-group">
+                <label for="userPasswordCheck">确认密码</label>
+                <input type="password" class="form-control" id="userPasswordCheck" placeholder="PasswordCheck"
+                       name="userPasswordCheck">
+                <div id="passwordCheckFeedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="userEmail">电子邮件</label>
+                <input type="email" class="form-control" id="userEmail" placeholder="Email" name="userEmail">
+            </div>
+
+
+
+            <div class="form-group ">
+                <input href="#" class="btn btn-primary btn-block" id="registerBtn" value="注册"/>
+                <hr class="my-4">
+                <small id="registerHelp" class="form-text text-muted" style="margin:10px 0px 10px 0px">已经有账号？去登录吧！
+                </small>
+                <a id="loginBtn" class="btn btn-primary btn-block" href="login.html">登录</a>
+            </div>
+
+
+            <div id="registerFeedback"></div>
+            <div class="alert" role="alert" id="registerResult">
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var nameCheck = false;
+    $('#userName').blur(function(){
+        var userName = $('#userName').val();
+        if( userName!= ''){
+            $.ajax({
+                type: "post",
+                url: getPath() + "/isRegistered",
+                async: false,
+                dataType:'json',
+                data: {"name":userName},
+                success: function (data) {
+                    if (data.flag) {
+                        $('#userName').addClass('is-valid');
+                        nameCheck = true;
+                    } else {
+                        $('#userName').addClass('is-invalid');
+                        $('#userNameFeedback').addClass('invalid-feedback');
+                        $('#userNameFeedback').html('抱歉，该用户名已被注册！');
+                    }
+                },
+                error: function () {
+                    alert("网络错误");
+                }
+            })
+        }
+
+    });
+
+    $('#userPasswordCheck').focus(function () {
+        $('#userPasswordCheck').removeClass('is-invalid');
+        $('#passwordCheckFeedback').html('');
+        $('#passwordCheckFeedback').removeClass('invalid-feedback');
+    });
+
+    $('#userName').focus(function () {
+        $('#userName').removeClass('is-invalid');
+        $('#userNameFeedback').html('');
+        $('#userNameFeedback').removeClass('invalid-feedback');
+    });
+
+    $('#userPassword').focus(function () {
+        $('#userPassword').removeClass('is-invalid');
+    });
+
+    $('#userEmail').focus(function () {
+        $('#userEmail').removeClass('is-invalid');
+    });
+
+
+    function getPath() {
+        var curPath = window.document.location.href;
+        var pathName = window.document.location.pathname;
+        var pos = curPath.indexOf(pathName);
+        var localhostPath = curPath.substring(0, pos);
+        var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+        return localhostPath + projectName;
+    }
+
+    $('#registerBtn').click(function () {
+        var flag = true;
+        var flag2 = true;
+        var userName = $('#userName').val();
+        var userPassword = $('#userPassword').val();
+        var userPasswordCheck = $('#userPasswordCheck').val();
+        var userEmail = $('#userEmail').val();
+        if (userName == '') {
+            $('#userName').addClass('is-invalid');
+            flag = false;
+
+        }
+
+        if(userPassword == ''){
+            $('#userPassword').addClass('is-invalid');
+            flag = false;
+        }
+
+        if(userEmail == ''){
+            $('#userEmail').addClass('is-invalid');
+            flag = false;
+        }
+
+        if(userPasswordCheck==''){
+            $('#userPasswordCheck').addClass('is-invalid');
+            flag = false;
+        }
+
+        if(!flag){
+            $('#registerFeedback').addClass('invalid-feedback');
+            $('#registerFeedback').html('不得为空！');
+        }
+
+        if(userPassword != userPasswordCheck){
+            console.log(userPassword)
+            console.log(userPasswordCheck)
+            $('#userPasswordCheck').addClass('is-invalid');
+            $('#passwordCheckFeedback').html('两次输入不一致，请检查密码！');
+            $('#passwordCheckFeedback').addClass('invalid-feedback');
+            flag2 = false;
+        }
+
+        if (flag && nameCheck && flag2) {
+            // console.log($('form').serialize());
+            $.ajax({
+                type: "post",
+                url: getPath() + "/registerUser",
+                async: false,
+                dataType:'json',
+                contentType: 'application/json',
+                data:JSON.stringify({"id":0,"name":userName,"password":userPassword,"email":userEmail,"role":false}),
+                success: function (data) {
+                    if (data.flag) {
+                        $('#userName').addClass('is-valid');
+                        $('#userPassword').addClass('is-valid');
+                        $('#userEmail').addClass('is-valid');
+                        $('#userPasswordCheck').addClass('is-valid');
+                        $('#registerResult').addClass('alert alert-success');
+                        $('#registerResult').html('注册成功！跳转至<a href="login.html">登录</a>界面')
+                        setTimeout(window.location.href = 'login.html', 5000);
+
+                    } else {
+                        alert('注册失败');
+                    }
+                },
+                error: function () {
+                    alert("网络错误");
+                }
+            })
+        }
+
+
+    })
+
+
+</script>
+</body>
+</html>
