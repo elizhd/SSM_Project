@@ -5,6 +5,7 @@
 2. 用户注册
 3. 数据管理
    * 增加、修改、删除
+   * 数据排序
    * 模糊搜索、精确搜索
    * Excel数据导入/导出
 ## 项目信息
@@ -15,7 +16,7 @@
     3. [boot-box](https://github.com/makeusabrew/bootbox)
     4. [Font-Awesome](https://github.com/FortAwesome/Font-Awesome)
 3. Maven整合
-4. 首页参考 [startbootstrap-bare](https://github.com/BlackrockDigital/startbootstrap-bare)
+4. 首页参考 [startbootstrap-grayscale](https://github.com/BlackrockDigital/startbootstrap-grayscale)
 5. 开发工具为IntelliJ IDEA
 ## 界面
 1. 主页
