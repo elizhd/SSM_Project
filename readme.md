@@ -17,4 +17,10 @@
 3. Maven整合
 4. 首页参考 [startbootstrap-bare](https://github.com/BlackrockDigital/startbootstrap-bare)
 5. 开发工具为IntelliJ IDEA
-     
+## 界面
+1. 登录界面
+![登录界面](img/login.jpg)
+2. 注册界面
+![注册界面](img/register.jpg)
+3. 管理界面
+![管理界面](img/management.jpg)
