@@ -18,9 +18,11 @@
 4. 首页参考 [startbootstrap-bare](https://github.com/BlackrockDigital/startbootstrap-bare)
 5. 开发工具为IntelliJ IDEA
 ## 界面
-1. 登录界面
-![登录界面](img/login.jpg)
-2. 注册界面
-![注册界面](img/register.jpg)
-3. 管理界面
-![管理界面](img/management.jpg)
+1. 主页
+![主页](https://github.com/ErGouBigDevil/SSM_Project/blob/master/img/index.jpg)
+2. 登录界面
+![登录界面](https://github.com/ErGouBigDevil/SSM_Project/blob/master/img/login.jpg)
+3. 注册界面
+![注册界面](https://github.com/ErGouBigDevil/SSM_Project/blob/master/img/register.jpg)
+4. 管理界面
+![管理界面](https://github.com/ErGouBigDevil/SSM_Project/blob/master/img/management.jpg)
