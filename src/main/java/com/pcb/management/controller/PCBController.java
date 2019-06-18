@@ -34,7 +34,7 @@ public class PCBController {
     ImportExcelUtil importExcelUtil = new ImportExcelUtil();
 
 
-    protected void writeJSON2Response(Object out, HttpServletResponse response) {
+    private void writeJSON2Response(Object out, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
         try {
             // System.out.println("SERVER: " + out);

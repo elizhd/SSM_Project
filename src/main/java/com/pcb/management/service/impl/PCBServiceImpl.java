@@ -3,7 +3,6 @@ package com.pcb.management.service.impl;
 import com.pcb.management.dao.IPCBDao;
 import com.pcb.management.model.PCB;
 import com.pcb.management.service.IPCBService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
