@@ -1,13 +1,10 @@
-import com.pcb.management.dao.IPCBDao;
 import com.pcb.management.model.PCB;
 import com.pcb.management.service.IPCBService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,7 +17,7 @@ import java.util.List;
 @RunWith(JUnit4ClassRunner.class)// 添加spring测试方案
 @ContextConfiguration("/spring-mybatis.xml")// 指定spring配置文件位置
 public class PCBTest {
-    @Autowired
+    @Resource(name = "PCBService")
     IPCBService PCBService;
 
     @Test

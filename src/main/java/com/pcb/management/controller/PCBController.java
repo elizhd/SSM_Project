@@ -35,10 +35,9 @@ public class PCBController {
 
 
     protected void writeJSON2Response(Object out, HttpServletResponse response) {
-        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         try {
-            System.out.println("SERVER: " + out);
+            // System.out.println("SERVER: " + out);
             response.getWriter().print(out);
         } catch (IOException e) {
             e.printStackTrace();
@@ -214,7 +213,7 @@ public class PCBController {
         InputStream in = null;
         in = file.getInputStream();
         List<List<Object>> listob = null;
-        listob = new ImportExcelUtil().getPCBListByExcel(in, file.getOriginalFilename());
+        listob = importExcelUtil.getPCBListByExcel(in, file.getOriginalFilename());
 
         System.out.println(listob.size());
         for (List<Object> lo : listob) {

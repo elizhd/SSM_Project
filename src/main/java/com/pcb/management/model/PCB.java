@@ -64,7 +64,5 @@ public class PCB {
     public String toString() {
         return JSON.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect,
                 SerializerFeature.WriteDateUseDateFormat);
-
-
     }
 }

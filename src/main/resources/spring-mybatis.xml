@@ -6,15 +6,6 @@
 
     <context:component-scan base-package="com.pcb.management"/>
 
-<!--    &lt;!&ndash;数据库配置&ndash;&gt;-->
-<!--    <bean id="dataSource"  class="org.apache.commons.dbcp.BasicDataSource"-->
-<!--          destroy-method="close">-->
-<!--        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
-<!--        <property name="url" value="jdbc:mysql://localhost:3306/pcb_db?useSSL=false"/>-->
-<!--        <property name="username" value="root"/>-->
-<!--        <property name="password" value="qwerty123456"/>-->
-<!--    </bean>-->
-
     <context:property-placeholder location="classpath:db.properties"/>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${jdbc.driver}"/>
@@ -29,13 +20,13 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.pcb.management.dao" />
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
     <!-- 事务管理transaction manager -->
